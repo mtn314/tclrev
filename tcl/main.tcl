@@ -9,7 +9,7 @@ proc parse_args {} {
     set usage "\n"
     append usage "tclsh main.tcl --dir <path_to_dir>"
 
-    if {[llength $::argv] != 2} {
+    if {$::argc < 2 || $::argc % 2 != 0} {
         puts $usage
         puts "Error: Missing arguments\n"
         exit
