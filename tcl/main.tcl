@@ -1,36 +1,12 @@
 #
 
-lappend ::auto_path "."
+lappend ::auto_path [file normalize [file dirname [info script]]]
 
-package require rev 1.0
+package require args 1.0
+package require rev  1.0
 
-proc parse_args {} {
-    set args [list]
-    set usage "\n"
-    append usage "tclsh main.tcl --dir <path_to_dir>"
+dict set args_def "--dir"    desc "Path to the directory to check"
 
-    if {$::argc < 2 || $::argc % 2 != 0} {
-        puts $usage
-        puts "Error: Missing arguments\n"
-        exit
-    }
-
-    foreach {key val} $::argv {
-        switch $key {
-            --dir {
-                lappend args [string trimleft $key "-"] $val
-            }
-            default {
-                puts $usage
-                puts "Error: Incorrect arguments\n"
-                exit
-            }
-        }
-    }
-
-    return $args
-}
-
-set args [parse_args]
+set args [::args::parse $args_def]
 
 rev::main [dict get $args dir]
