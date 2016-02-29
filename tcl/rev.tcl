@@ -6,6 +6,8 @@ package require regex_chk 1.0
 namespace eval ::rev {}
 
 proc ::rev::main {dir} {
+    ::regex_chk::init
+
     set files [::rev::get_tcl_files_paths $dir]
 
     foreach {dirname files} $files {

@@ -2,24 +2,42 @@
 package provide regex_chk 1.0
 
 namespace eval ::regex_chk {
-    # (\\\n)?[\s]* - to allow for multi line matching
+    variable RULES
+}
 
-    dict set rule line_chk {expr[\s]+}
-    dict set rule rule     {expr[\s]+(\\\n)?[\s]*\{}
-    dict set rule msg      "expr's expression needs to be enclosed in {}"
-    lappend RULES $rule
+proc ::regex_chk::init {} {
+    variable RULES
+    catch {unset RULES}
 
-    dict set rule line_chk {lsearch[\s]+}
-    # [\[\{\"\$] - is to check if we have a command, list or a variable as the first arg
-    dict set rule rule     {lsearch[\s]+(\\\n)?[\s]*[\[\{\"\$]}
-    dict set rule msg      "The 1st lsearch arg must be a variable, command or list"
-    lappend RULES $rule
+    # Exclude stuff like variable names ending with the command's name
+    set re_prefix     {(^|[\[\{\s\"])}
+    # To allow for multi line matching
+    set re_multiline  {(\\\n)?[\s]*}
+    # Some commands can have various switches
+    set re_cmd_switch {(\-[a-z\-]+\s+)*}
+    # To check if we have a command, list or a variable as the first arg
+    set re_not_word   {[\[\{\"\$]}
 
-    dict set rule line_chk {llength[\s]+}
-    # [\[\{\"\$] - is to check if we have a command, list or a variable as the first arg
-    dict set rule rule     {llength[\s]+(\\\n)?[\s]*[\[\{\"\$]}
-    dict set rule msg      "The 1st llength arg must be a variable, command or list"
-    lappend RULES $rule
+    set line_chk [format "%s%s" $re_prefix {expr[\s]+}]
+    set rule     [format "%s%s%s" $line_chk $re_multiline {\{}]
+    set msg      "expr's expression needs to be enclosed in {}"
+    ::regex_chk::add_rule $line_chk $rule $msg
+
+    set line_chk [format "%s%s" $re_prefix {lsearch[\s]+}]
+    set rule     [format "%s%s%s%s" $line_chk $re_cmd_switch $re_multiline $re_not_word]
+    set msg      "The 1st lsearch arg must be a variable, command or list"
+    ::regex_chk::add_rule $line_chk $rule $msg
+
+    set line_chk [format "%s%s" $re_prefix {llength[\s]+}]
+    set rule     [format "%s%s%s" $line_chk $re_multiline $re_not_word]
+    set msg      "The 1st llength arg must be a variable, command or list"
+    ::regex_chk::add_rule $line_chk $rule $msg
+}
+
+
+proc ::regex_chk::add_rule {line_chk main_rule msg} {
+    variable RULES
+    lappend RULES [list line_chk $line_chk rule $main_rule msg $msg]
 }
 
 

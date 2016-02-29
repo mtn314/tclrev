@@ -10,6 +10,8 @@ lsearch {a b c d} a
 lsearch \
     {a b c d} a
 
+lsearch -exact -- $lvar a
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Invalid
 
