@@ -42,11 +42,24 @@ WARN :: lsearch lvar a
 WARN ::
 ```
 
-## Checks
+## Valid commands checks
+
+### RegEx Checks
 
 | Check | Description |
 | ---   | ---         |
 | expr | Check for curly brackets to avoid possible double execution. |
 | llength | The first argument must be a variable, command or list. |
 | lsearch | The first argument must be a variable, command or list. |
+
+### Other Checks
+
+**TODO**
+
+# Future (possible) functionality
+
+| Check | Description |
+| ---   | ---         |
 | (TODO) Multiline | Commands split to multiple lines to contain "\" at the end of each line.|
+| (TODO) Braces check | Check balanced brackets|
+| (TODO) Junit style reports | Could easily be integrated into CI tools|
