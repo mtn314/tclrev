@@ -2,7 +2,6 @@
 package require tcltest
 
 lappend ::auto_path [file join [file dirname [file dirname [info script]]] "tcl"]
-puts $::auto_path
 
 package require regex_chk 1.0
 
