@@ -1,6 +1,8 @@
 #
 package provide regex_chk 1.0
 
+package require report 1.0
+
 namespace eval ::regex_chk {
     variable RULES
 }
@@ -21,23 +23,26 @@ proc ::regex_chk::init {} {
     set line_chk [format "%s%s" $re_prefix {expr[\s]+}]
     set rule     [format "%s%s%s" $line_chk $re_multiline {\{}]
     set msg      "expr's expression needs to be enclosed in {}"
-    ::regex_chk::add_rule $line_chk $rule $msg
+    set level    WARN
+    ::regex_chk::add_rule $line_chk $rule $msg $level
 
     set line_chk [format "%s%s" $re_prefix {lsearch[\s]+}]
     set rule     [format "%s%s%s%s" $line_chk $re_cmd_switch $re_multiline $re_not_word]
     set msg      "The 1st lsearch arg must be a variable, command or list"
-    ::regex_chk::add_rule $line_chk $rule $msg
+    set level    ERROR
+    ::regex_chk::add_rule $line_chk $rule $msg $level
 
     set line_chk [format "%s%s" $re_prefix {llength[\s]+}]
     set rule     [format "%s%s%s" $line_chk $re_multiline $re_not_word]
     set msg      "The 1st llength arg must be a variable, command or list"
-    ::regex_chk::add_rule $line_chk $rule $msg
+    set level    ERROR
+    ::regex_chk::add_rule $line_chk $rule $msg $level
 }
 
 
-proc ::regex_chk::add_rule {line_chk main_rule msg} {
+proc ::regex_chk::add_rule {line_chk main_rule msg level} {
     variable RULES
-    lappend RULES [list line_chk $line_chk rule $main_rule msg $msg]
+    lappend RULES [list line_chk $line_chk rule $main_rule msg $msg level $level]
 }
 
 
@@ -68,11 +73,7 @@ proc ::regex_chk::review_file {filepath} {
             continue
         }
 
-        ::rev::log WARN "---------------------------------"
-        ::rev::log WARN "$filepath - Line:$row"
-        ::rev::log WARN [dict get $result msg]
-        ::rev::log WARN $line
-        ::rev::log WARN ""
+        ::report::add_issue [dict get $result level] $row $filepath [dict get $result msg] $line
     }
     close $handle
 }
@@ -108,7 +109,7 @@ proc ::regex_chk::run_checks {line} {
 
         set is_valid [regexp [dict get $rule rule] $line]
         if {!$is_valid} {
-            return [list status 0 msg [dict get $rule msg]]
+            return [list status 0 msg [dict get $rule msg] level [dict get $rule level]]
         }
     }
 

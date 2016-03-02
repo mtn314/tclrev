@@ -1,7 +1,7 @@
 #
 package provide args 1.0
 
-namespace eval args {}
+namespace eval ::args {}
 
 #
 # The procedure parses arguments configuration and shows usages if needed
