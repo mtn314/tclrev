@@ -36,8 +36,7 @@ proc ::rev::get_tcl_files_paths {dir} {
         return 0
     }
 
-    set ldirs $dir
-    lappend ldirs {*}[glob -nocomplain -type d [file join $dir *]]
+    set ldirs [::rev::get_recursive_dirs $dir]
 
     set lfiles [list]
 
@@ -46,4 +45,12 @@ proc ::rev::get_tcl_files_paths {dir} {
     }
 
     return $lfiles
+}
+
+proc ::rev::get_recursive_dirs {dir} {
+    set ldirs $dir
+    foreach subdir [glob -nocomplain -type d [file join $dir *]] {
+        lappend ldirs {*}[::rev::get_recursive_dirs $subdir]
+    }
+    return $ldirs
 }
