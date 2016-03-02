@@ -5,6 +5,8 @@ package require log 1.0
 
 namespace eval ::report {
     variable ISSUES
+
+    set ISSUES [list]
 }
 
 proc ::report::add_issue {level line_no filepath msg snippet} {
