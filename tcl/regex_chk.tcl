@@ -16,7 +16,7 @@ proc ::regex_chk::init {} {
     # To allow for multi line matching
     set re_multiline  {(\\\n)?[\s]*}
     # Some commands can have various switches
-    set re_cmd_switch {(\-[a-z\-]+\s+)*}
+    set re_cmd_switch {((\-[a-z\-]+\s+)*|(\-index\s[0-9]+)*|(\-start\s[0-9]+)*)}
     # To check if we have a command, list or a variable as the first arg
     set re_not_word   {[\[\{\"\$]}
 

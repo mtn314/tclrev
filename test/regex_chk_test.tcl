@@ -59,7 +59,7 @@ package require regex_chk 1.0
 } -body {
     set line "expr 1+1"
     ::regex_chk::run_checks $line
-} -result [list status 0 msg "expr's expression needs to be enclosed in {}"]
+} -result [list status 0 msg "expr's expression needs to be enclosed in {}" level WARN]
 
 ::tcltest::test run_checks {expr - valid} -setup {
     ::regex_chk::init
@@ -96,12 +96,26 @@ package require regex_chk 1.0
 } -body {
     set line {lsearch lvar a}
     ::regex_chk::run_checks $line
-} -result [list status 0 msg "The 1st lsearch arg must be a variable, command or list"]
+} -result [list status 0 msg "The 1st lsearch arg must be a variable, command or list" level ERROR]
 
 ::tcltest::test run_checks {lsearch - valid with switch} -setup {
     ::regex_chk::init
 } -body {
     set line {lsearch -exact $lvar a}
+    ::regex_chk::run_checks $line
+} -result [list status 1 msg ""]
+
+::tcltest::test run_checks {lsearch - valid with -index switch} -setup {
+    ::regex_chk::init
+} -body {
+    set line {lsearch -index 0 $lvar a}
+    ::regex_chk::run_checks $line
+} -result [list status 1 msg ""]
+
+::tcltest::test run_checks {lsearch - valid with -index switch} -setup {
+    ::regex_chk::init
+} -body {
+    set line {lsearch -start 1 $lvar a}
     ::regex_chk::run_checks $line
 } -result [list status 1 msg ""]
 
@@ -133,7 +147,7 @@ package require regex_chk 1.0
 } -body {
     set line {llength lvar a}
     ::regex_chk::run_checks $line
-} -result [list status 0 msg "The 1st llength arg must be a variable, command or list"]
+} -result [list status 0 msg "The 1st llength arg must be a variable, command or list" level ERROR]
 
 ################################################################################
 ::tcltest::cleanupTests
