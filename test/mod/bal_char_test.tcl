@@ -25,13 +25,18 @@ package require bal_char 1.0
     ::bal_char::is_brace_balanced $string
 } -result 1
 
-::tcltest::test is_brace_balanced {no} -body {
+::tcltest::test is_brace_balanced {no - missing right brace} -body {
     set string "\{"
     ::bal_char::is_brace_balanced $string
 } -result 0
 
-::tcltest::test is_brace_balanced {no} -body {
+::tcltest::test is_brace_balanced {no - missing right brace} -body {
     set string "{\{}"
+    ::bal_char::is_brace_balanced $string
+} -result 0
+
+::tcltest::test is_brace_balanced {no - missing left brace} -body {
+    set string "{\}}"
     ::bal_char::is_brace_balanced $string
 } -result 0
 
