@@ -21,13 +21,13 @@ proc ::rev::main {dir} {
 }
 
 proc ::rev::review_file {filepath} {
-    regex_chk::review_file $filepath
-    ::report::write
-    ::report::reset
-
     set handle [open $filepath "r"]
     set data [read $handle]
     close $handle
+
+    regex_chk::review $filepath $data
+    ::report::write
+    ::report::reset
 
     set balanced_braces [::bal_char::is_brace_balanced $data]
     if {!$balanced_braces} {

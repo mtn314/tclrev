@@ -46,13 +46,12 @@ proc ::regex_chk::add_rule {line_chk main_rule msg level} {
 }
 
 
-proc ::regex_chk::review_file {filepath} {
-    set handle [open $filepath "r"]
+proc ::regex_chk::review {filepath data} {
     set rowno 0
     set lcmd [list]
 
-    while {[gets $handle line] >= 0} {
-        incr row
+    foreach line [split $data "\n"] {
+        incr rowno
 
         if {[::regex_chk::is_line_to_skip $line]} {
             continue
@@ -73,9 +72,8 @@ proc ::regex_chk::review_file {filepath} {
             continue
         }
 
-        ::report::add_issue [dict get $result level] $row $filepath [dict get $result msg] $line
+        ::report::add_issue [dict get $result level] $rowno $filepath [dict get $result msg] $line
     }
-    close $handle
 }
 
 
