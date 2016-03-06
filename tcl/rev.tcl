@@ -31,7 +31,7 @@ proc ::rev::review_file {filepath} {
 
     set balanced_braces [::bal_char::is_brace_balanced $data]
     if {!$balanced_braces} {
-        ::report::add_issue ERROR "" $filepath "Unballanced braces" ""
+        ::report::add_issue ERROR "" $filepath "Unbalanced braces" ""
         ::report::write
         ::report::reset
     }
