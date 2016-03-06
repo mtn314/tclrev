@@ -12,6 +12,8 @@ lsearch \
 
 lsearch -exact -- $lvar a
 
+set string "lsearch \[list a b c d e\] a"
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Invalid
 

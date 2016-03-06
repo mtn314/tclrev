@@ -18,7 +18,9 @@ proc ::regex_chk::init {} {
     # Some commands can have various switches
     set re_cmd_switch {((\-[a-z\-]+\s+)*|(\-index\s[0-9]+)*|(\-start\s[0-9]+)*)}
     # To check if we have a command, list or a variable as the first arg
-    set re_not_word   {[\[\{\"\$]}
+    # The possible leading \ is to deal with cases when the match is a string, like:
+    #   set command "lsearch \$list a"
+    set re_not_word   {\\{0,1}[\[\{\"\$]}
 
     set line_chk [format "%s%s" $re_prefix {expr[\s]+}]
     set rule     [format "%s%s%s" $line_chk $re_multiline {\{}]

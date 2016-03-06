@@ -91,13 +91,6 @@ package require regex_chk 1.0
     ::regex_chk::run_checks $line
 } -result [list status 1 msg ""]
 
-::tcltest::test run_checks {lsearch - invalid - a word} -setup {
-    ::regex_chk::init
-} -body {
-    set line {lsearch lvar a}
-    ::regex_chk::run_checks $line
-} -result [list status 0 msg "The 1st lsearch arg must be a variable, command or list" level ERROR]
-
 ::tcltest::test run_checks {lsearch - valid with switch} -setup {
     ::regex_chk::init
 } -body {
@@ -118,6 +111,20 @@ package require regex_chk 1.0
     set line {lsearch -start 1 $lvar a}
     ::regex_chk::run_checks $line
 } -result [list status 1 msg ""]
+
+::tcltest::test run_checks {lsearch - valid with a backslash (a string, not a command)} -setup {
+    ::regex_chk::init
+} -body {
+    set line {lsearch \$lvar a}
+    ::regex_chk::run_checks $line
+} -result [list status 1 msg ""]
+
+::tcltest::test run_checks {lsearch - invalid - a word} -setup {
+    ::regex_chk::init
+} -body {
+    set line {lsearch lvar a}
+    ::regex_chk::run_checks $line
+} -result [list status 0 msg "The 1st lsearch arg must be a variable, command or list" level ERROR]
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
