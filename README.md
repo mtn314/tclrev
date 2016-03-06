@@ -17,29 +17,33 @@ Run the below to get display a usage message.
 
 ```
 cd tclrev
-tclsh tcl/main.tcl --dir <some_directory>
+tclsh tcl/main.tcl --dir <some_directory> [--level <ERROR|WARN|INFO>]
 ```
 
 ## Example
 
 ```
 $ cd tclrev
-$ tclsh tcl/main.tcl --dir test_end2end/
+$ tclsh tcl/main.tcl --dir test_end2end/ --level WARN
 WARN :: ---------------------------------
-WARN :: test_end2end/expr_test.tcl - Line:10
+WARN :: test_end2end/expr_test.tcl:12
 WARN :: expr's expression needs to be enclosed in {}
 WARN :: expr 1 + 1
 WARN ::
-WARN :: ---------------------------------
-WARN :: test_end2end/llength_test.tcl - Line:16
-WARN :: The 1st llength arg must be a variable, command or list
-WARN :: llength lvar
-WARN ::
-WARN :: ---------------------------------
-WARN :: test_end2end/lsearch_test.tcl - Line:16
-WARN :: The 1st lsearch arg must be a variable, command or list
-WARN :: lsearch lvar a
-WARN ::
+ERROR :: ---------------------------------
+ERROR :: test_end2end/llength_test.tcl:16
+ERROR :: The 1st llength arg must be a variable, command or list
+ERROR :: llength lvar
+ERROR ::
+ERROR :: ---------------------------------
+ERROR :: test_end2end/lsearch_test.tcl:18
+ERROR :: The 1st lsearch arg must be a variable, command or list
+ERROR :: lsearch lvar a
+ERROR ::
+ERROR :: ---------------------------------
+ERROR :: test_end2end/unbalanced_braces.tcl:
+ERROR :: Unbalanced braces
+ERROR ::
 ```
 
 ## Valid commands checks
@@ -54,12 +58,13 @@ WARN ::
 
 ### Other Checks
 
-**TODO**
+| Check | Description |
+| ---   | ---         |
+| Brace check | Check balanced braces|
 
 # Future (possible) functionality
 
 | Check | Description |
 | ---   | ---         |
 | (TODO) Multiline | Commands split to multiple lines to contain "\" at the end of each line.|
-| (TODO) Braces check | Check balanced brackets|
 | (TODO) Junit style reports | Could easily be integrated into CI tools|
