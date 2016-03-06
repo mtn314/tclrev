@@ -2,7 +2,8 @@
 set ::xtn tcl
 
 foreach {pkg ver file} {
-    bal_char 1.0 bal_char
+    bal_char  1.0 bal_char
+    regex_chk 1.0 regex_chk
 } {
     # correct file paths - used with a relative in auto_path (mainly tcltest)
     set path [file dirname [info script]]

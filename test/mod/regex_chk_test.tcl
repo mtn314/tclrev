@@ -1,7 +1,8 @@
 #
 package require tcltest
 
-lappend ::auto_path [file join [file dirname [file dirname [info script]]] "tcl"]
+set root_dir [file dirname [file dirname [file dirname [info script]]]]
+lappend ::auto_path [file join $root_dir "tcl"]
 
 package require regex_chk 1.0
 
