@@ -23,22 +23,22 @@ proc ::log::init {level} {
 }
 
 proc ::log::error {msg} {
-    ::log::_log ERROR $msg
+    ::log::_log ERROR $msg 31
 }
 
 proc ::log::warn {msg} {
-    ::log::_log WARN $msg
+    ::log::_log WARN $msg 36
 }
 
 proc ::log::info {msg} {
-    ::log::_log INFO $msg
+    ::log::_log INFO $msg 37
 }
 
-proc ::log::_log {level msg} {
+proc ::log::_log {level msg color} {
     variable LEVEL
     variable LEVELS
 
     if {[dict get $LEVELS $level] <= [dict get $LEVELS $LEVEL]} {
-        puts "$level :: $msg"
+        puts "\033\[01;${color}m${level}\033\[0m :: ${msg}"
     }
 }
