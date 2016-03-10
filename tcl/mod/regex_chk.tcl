@@ -28,17 +28,30 @@ proc ::regex_chk::init {} {
     set level    WARN
     ::regex_chk::add_rule $line_chk $rule $msg $level
 
-    set line_chk [format "%s%s" $re_prefix {lsearch[\s]+}]
-    set rule     [format "%s%s%s%s" $line_chk $re_cmd_switch $re_multiline $re_not_word]
-    set msg      "The 1st lsearch arg must be a variable, command or list"
-    set level    ERROR
-    ::regex_chk::add_rule $line_chk $rule $msg $level
+    foreach cmd {
+        lsearch
+        lsort
+    } {
+        set line_chk [format "%s%s%s" $re_prefix $cmd {[\s]+}]
+        set rule     [format "%s%s%s%s" $line_chk $re_cmd_switch $re_multiline $re_not_word]
+        set msg      "The 1st $cmd arg must be a variable, command or list"
+        set level    ERROR
+        ::regex_chk::add_rule $line_chk $rule $msg $level
+    }
 
-    set line_chk [format "%s%s" $re_prefix {llength[\s]+}]
-    set rule     [format "%s%s%s" $line_chk $re_multiline $re_not_word]
-    set msg      "The 1st llength arg must be a variable, command or list"
-    set level    ERROR
-    ::regex_chk::add_rule $line_chk $rule $msg $level
+    foreach cmd {
+        llength
+        lreverse
+        lreplace
+        lrange
+        lindex
+    } {
+        set line_chk [format "%s%s%s" $re_prefix $cmd {[\s]+}]
+        set rule     [format "%s%s%s" $line_chk $re_multiline $re_not_word]
+        set msg      "The 1st $cmd arg must be a variable, command or list"
+        set level    ERROR
+        ::regex_chk::add_rule $line_chk $rule $msg $level
+    }
 }
 
 

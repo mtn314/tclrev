@@ -135,6 +135,16 @@ package require regex_chk 1.0
 } -result [list status 0 msg "The 1st lsearch arg must be a variable, command or list" level ERROR]
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# The below are just variants of the above more comprehensive cases
+
+::tcltest::test run_checks {lsort - valid - variable} -setup {
+    ::regex_chk::init
+} -body {
+    set line {lsort $lvar a}
+    ::regex_chk::run_checks $line
+} -result [list status 1 msg ""]
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::tcltest::test run_checks {llength - valid - variable} -setup {
     ::regex_chk::init
@@ -163,6 +173,37 @@ package require regex_chk 1.0
     set line {llength lvar a}
     ::regex_chk::run_checks $line
 } -result [list status 0 msg "The 1st llength arg must be a variable, command or list" level ERROR]
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# The below are just variants of the above more comprehensive cases
+
+::tcltest::test run_checks {lreverse - valid - variable} -setup {
+    ::regex_chk::init
+} -body {
+    set line {lreverse $lvar a}
+    ::regex_chk::run_checks $line
+} -result [list status 1 msg ""]
+
+::tcltest::test run_checks {lreplace - valid - variable} -setup {
+    ::regex_chk::init
+} -body {
+    set line {lreplace $lvar a}
+    ::regex_chk::run_checks $line
+} -result [list status 1 msg ""]
+
+::tcltest::test run_checks {lrange - valid - variable} -setup {
+    ::regex_chk::init
+} -body {
+    set line {lrange $lvar a}
+    ::regex_chk::run_checks $line
+} -result [list status 1 msg ""]
+
+::tcltest::test run_checks {lindex - valid - variable} -setup {
+    ::regex_chk::init
+} -body {
+    set line {lindex $lvar a}
+    ::regex_chk::run_checks $line
+} -result [list status 1 msg ""]
 
 ################################################################################
 ::tcltest::cleanupTests
