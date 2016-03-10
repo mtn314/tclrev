@@ -52,9 +52,14 @@ ERROR ::
 
 | Check | Description |
 | ---   | ---         |
-| expr | Check for curly brackets to avoid possible double execution. |
-| llength | The first argument must be a variable, command or list. |
-| lsearch | The first argument must be a variable, command or list. |
+| expr     | Check for curly brackets to avoid possible double execution. |
+| llength  | The first argument must be a variable, command or list. |
+| lsort    | The first argument must be a variable, command or list. |
+| lsearch  | The first argument must be a variable, command or list. |
+| lreverse | The first argument must be a variable, command or list. |
+| lreplace | The first argument must be a variable, command or list. |
+| lrange   | The first argument must be a variable, command or list. |
+| lindex   | The first argument must be a variable, command or list. |
 
 ### Other Checks
 
