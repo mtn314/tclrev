@@ -113,6 +113,13 @@ package require regex_chk 1.0
     ::regex_chk::run_checks $line
 } -result [list status 1 msg ""]
 
+::tcltest::test run_checks {lsearch - valid with -index switch} -setup {
+    ::regex_chk::init
+} -body {
+    set line {lsearch -all -inline -not -exact {a b c a d e a f g a} a}
+    ::regex_chk::run_checks $line
+} -result [list status 1 msg ""]
+
 ::tcltest::test run_checks {lsearch - valid with a backslash (a string, not a command)} -setup {
     ::regex_chk::init
 } -body {
