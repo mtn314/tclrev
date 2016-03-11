@@ -7,10 +7,15 @@ package require log  1.0
 package require rev  1.0
 
 dict set args_def "--dir"    desc "Path to the directory to check"
+
 dict set args_def "--level"  desc "Log Level: ERROR|WARN|INFO"
 dict set args_def "--level"  default INFO
+
+dict set args_def "--s"      desc "Scan symlinked directories: 1|0"
+dict set args_def "--s"      default 0
 
 set args [::args::parse $args_def]
 
 ::log::init [dict get $args level]
-rev::main   [dict get $args dir]
+
+::rev::main [dict get $args dir] [dict get $args s]

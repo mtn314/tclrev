@@ -8,10 +8,10 @@ package require bal_char  1.0
 
 namespace eval ::rev {}
 
-proc ::rev::main {dir} {
+proc ::rev::main {dir inc_symlinks} {
     ::regex_chk::init
 
-    set files [::path::get_tcl_files_paths $dir]
+    set files [::path::get_tcl_files_paths $dir $inc_symlinks]
 
     foreach {dirname files} $files {
         foreach filepath $files {

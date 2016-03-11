@@ -6,16 +6,17 @@ namespace eval ::path {}
 #
 # Returns paths to all TCL files in all subdirectories in
 # args:
-#   dir - directory to traverse
+#   dir          - directory to traverse
+#   inc_symlinks - scan symlinked directories as well
 # return:
 #   {dir1 {filepath1 filepath2} dir2 {filepath3 filepath4}}
-proc ::path::get_tcl_files_paths {dir} {
+proc ::path::get_tcl_files_paths {dir inc_symlinks} {
 
     if {![file isdirectory $dir]} {
         error "The input directory does not exist: $dir"
     }
 
-    set ldirs [::path::get_recursive_dirs $dir]
+    set ldirs [::path::get_recursive_dirs $dir $inc_symlinks]
 
     set lfiles [list]
 
@@ -29,13 +30,20 @@ proc ::path::get_tcl_files_paths {dir} {
 #
 # Returns list of subdirectories in a directory
 # args:
-#   dir - directory to traverse
+#   dir          - directory to traverse
+#   inc_symlinks - scan symlinked directories as well
 # return:
 #   {dir1 dir2 dir3}
-proc ::path::get_recursive_dirs {dir} {
+proc ::path::get_recursive_dirs {dir inc_symlinks} {
     set ldirs $dir
+
     foreach subdir [glob -nocomplain -type d [file join $dir *]] {
-        lappend ldirs {*}[::path::get_recursive_dirs $subdir]
+        if {$inc_symlinks == 0 && [file type $subdir] == "link"} {
+            ::log::info "Skipping symlink: $subdir"
+            return $ldirs
+        }
+
+        lappend ldirs {*}[::path::get_recursive_dirs $subdir $inc_symlinks]
     }
     return $ldirs
 }
