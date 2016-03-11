@@ -15,8 +15,6 @@ proc ::regex_chk::init {} {
     set re_prefix     {(^|[\[\{\s\"])}
     # To allow for multi line matching
     set re_multiline  {(\\\n)?[\s]*}
-    # Some commands can have various switches
-    set re_cmd_switch {((\-[a-z\-]+\s+)*|(\-index\s[0-9]+)*|(\-start\s[0-9]+)*)}
     # To check if we have a command, list or a variable as the first arg
     # The possible leading \ is to deal with cases when the match is a string, like:
     #   set command "lsearch \$list a"
@@ -28,9 +26,9 @@ proc ::regex_chk::init {} {
     set level    WARN
     ::regex_chk::add_rule $line_chk $rule $msg $level
 
-    foreach cmd {
-        lsearch
-        lsort
+    foreach {cmd re_cmd_switch} {
+        lsearch {((\-[a-z\-]+\s+)*|(\-index\s[0-9]+)*|(\-start\s[0-9]+)*)*}
+        lsort   {((\-[a-z\-]+\s+)*|(\-index\s[0-9]+)*|(\-command\s[^\s]+)*)*}
     } {
         set line_chk [format "%s%s%s" $re_prefix $cmd {[\s]+}]
         set rule     [format "%s%s%s%s" $line_chk $re_cmd_switch $re_multiline $re_not_word]

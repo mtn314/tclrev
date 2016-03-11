@@ -140,9 +140,24 @@ package require regex_chk 1.0
 ::tcltest::test run_checks {lsort - valid - variable} -setup {
     ::regex_chk::init
 } -body {
-    set line {lsort $lvar a}
+    set line {lsort $lvar}
     ::regex_chk::run_checks $line
 } -result [list status 1 msg ""]
+
+::tcltest::test run_checks {lsort - valid - multiple switches} -setup {
+    ::regex_chk::init
+} -body {
+    set line {lsort -integer -index 1 $lvar}
+    ::regex_chk::run_checks $line
+} -result [list status 1 msg ""]
+
+::tcltest::test run_checks {lsort -command - valid} -setup {
+    ::regex_chk::init
+} -body {
+    set line {lsort -command some_sort_cmd $lvar}
+    ::regex_chk::run_checks $line
+} -result [list status 1 msg ""]
+
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
