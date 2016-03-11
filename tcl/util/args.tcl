@@ -49,7 +49,7 @@ proc ::args::generate_usage {args_def} {
     dict for {key val} $args_def {
         set opt_arg ""
         if {[dict exists $val default]} {
-            set opt_arg " - Optional"
+            set opt_arg " - Optional - default value: [dict get $val default]"
         }
 
         append usage [format "    %s%s\n" $key $opt_arg]
