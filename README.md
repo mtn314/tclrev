@@ -13,11 +13,22 @@ tclsh test/runner.tcl
 
 ## Running
 
-Run the below to get display a usage message.
+A usage message:
 
 ```
-cd tclrev
-tclsh tcl/main.tcl --dir <some_directory> [--level <ERROR|WARN|INFO>]
+$ cd tclrev
+$ tclsh tcl/main.tcl
+
+Usage:
+tclsh tcl/main.tcl
+  args:
+    --dir
+         Path to the directory to check
+    --level - Optional - default value: INFO
+         Log Level: ERROR|WARN|INFO
+    --s - Optional - default value: 0
+         Scan symlinked directories: 1|0
+
 ```
 
 ## Example
