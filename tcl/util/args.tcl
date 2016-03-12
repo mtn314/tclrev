@@ -9,17 +9,34 @@ namespace eval ::args {}
 # An example use:
 #   package require args 1.0
 #
-#   dict set args_def "--dir"    desc "Path to the directory to check"
-#   dict set args_def "--cmd_db" desc "Path to the file containing the command database"
-#   dict set args_def "--cmd_db" default ""
+#   set args_def {
+#       "--dir" {
+#           desc  "Path to the directory to check"
+#           nargs 1
+#       }
+#       "--level" {
+#           desc "Log Level: ERROR|WARN|INFO"
+#           default INFO
+#           nargs 1
+#       }
+#       "-s" {
+#           desc "Scan symlinked directories"
+#           nargs 0
+#       }
+# }
 #
 #   set args [::args::parse $args_def]
 #
 # args:
-#   args_def - a dictionary of predefined arguments, format:
-#              "--key" desc "Some descritpion"
-#              "--key" default "Some default value"
-#                 - if default is specified, then the argument is treated as optional
+#   args_def - a list of predefined arguments, format:
+#              "--key" {
+#                      desc    "Some descritpion"
+#                      default "Some default value"
+#                      nargs   int
+#              }
+#           - if default is specified, then the argument is treated as optional
+#           - nargs - number of values for the argument, if set to 0, then the arg
+#                     is assumed to be a switch (1 if present, 0 otherwise)
 # return:
 #   returns a {key value key value} list where keys are without leading dashes
 #
@@ -61,25 +78,36 @@ proc ::args::generate_usage {args_def} {
 
 
 proc ::args::_parse {args_def cmd_argv cmd_argc} {
-    if {$cmd_argc % 2 != 0} {
-        error "Error: Arguments must be pairs of --key value"
-    }
-
-    dict for {key val} $args_def {
+    foreach {key val} $args_def {
         set found 0
+        set nargs 1
+        if {[dict exists $val nargs]} {
+            set nargs [dict get $val nargs]
+        }
 
-        foreach {in_key in_val} $cmd_argv {
+        for {set i 0} {$i < $cmd_argc} {incr i} {
+            set in_key [lindex $cmd_argv $i]
             if {$key == $in_key} {
-                lappend app_args [string trimleft $in_key "-"] $in_val
+                if {$nargs > 0} {
+                    # TODO support for $nargs > 1
+                    incr i
+                    lappend app_args [string trimleft $in_key "-"] [lindex $cmd_argv $i]
+                } else {
+                    lappend app_args [string trimleft $in_key "-"] 1
+                }
                 set found 1
                 break
             }
         }
 
-        if {[dict exists $val default] && $found == 0} {
-            lappend app_args [string trimleft $key "-"] [dict get $args_def $key default]
-        } elseif {$found == 0} {
-            error "Error: $key is mandatory."
+        if {$found == 0} {
+            if {$nargs == 0} {
+                lappend app_args [string trimleft $key "-"] 0
+            } elseif {[dict exists $val default]} {
+                lappend app_args [string trimleft $key "-"] [dict get $args_def $key default]
+            } else {
+                error "Error: $key is mandatory."
+            }
         }
     }
 

@@ -6,13 +6,19 @@ package require args 1.0
 package require log  1.0
 package require rev  1.0
 
-dict set args_def "--dir"    desc "Path to the directory to check"
-
-dict set args_def "--level"  desc "Log Level: ERROR|WARN|INFO"
-dict set args_def "--level"  default INFO
-
-dict set args_def "--s"      desc "Scan symlinked directories: 1|0"
-dict set args_def "--s"      default 0
+set args_def {
+    "--dir" {
+        desc "Path to the directory to check"
+    }
+    "--level" {
+        desc "Log Level: ERROR|WARN|INFO"
+        default INFO
+    }
+    "-s" {
+        desc "Scan symlinked directories"
+        nargs 0
+    }
+}
 
 set args [::args::parse $args_def]
 

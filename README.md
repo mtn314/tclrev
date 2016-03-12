@@ -26,9 +26,8 @@ tclsh tcl/main.tcl
          Path to the directory to check
     --level - Optional - default value: INFO
          Log Level: ERROR|WARN|INFO
-    --s - Optional - default value: 0
-         Scan symlinked directories: 1|0
-
+    -s
+         Scan symlinked directories
 ```
 
 ## Example
