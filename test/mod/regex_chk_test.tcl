@@ -113,10 +113,24 @@ package require regex_chk 1.0
     ::regex_chk::run_checks $line
 } -result [list status 1 msg ""]
 
-::tcltest::test run_checks {lsearch - valid with -index switch} -setup {
+::tcltest::test run_checks {lsearch - valid with multiple switches} -setup {
     ::regex_chk::init
 } -body {
-    set line {lsearch -all -inline -not -exact {a b c a d e a f g a} a}
+    set line {lsearch -all -inline -not -exact {a b c} a}
+    ::regex_chk::run_checks $line
+} -result [list status 1 msg ""]
+
+::tcltest::test run_checks {lsearch - valid with multiple and -index switches} -setup {
+    ::regex_chk::init
+} -body {
+    set line {lsearch -all -index 0 -inline {a b c} a}
+    ::regex_chk::run_checks $line
+} -result [list status 1 msg ""]
+
+::tcltest::test run_checks {lsearch - valid with multiple and -start switch} -setup {
+    ::regex_chk::init
+} -body {
+    set line {lsearch -all -start 0 -inline {a b c} a}
     ::regex_chk::run_checks $line
 } -result [list status 1 msg ""]
 
@@ -144,10 +158,17 @@ package require regex_chk 1.0
     ::regex_chk::run_checks $line
 } -result [list status 1 msg ""]
 
-::tcltest::test run_checks {lsort - valid - multiple switches} -setup {
+::tcltest::test run_checks {lsort - valid - two switches} -setup {
     ::regex_chk::init
 } -body {
     set line {lsort -integer -index 1 $lvar}
+    ::regex_chk::run_checks $line
+} -result [list status 1 msg ""]
+
+::tcltest::test run_checks {lsort - valid - multiple and -index switches} -setup {
+    ::regex_chk::init
+} -body {
+    set line {lsort -index 1 -increasing -integer $lvar}
     ::regex_chk::run_checks $line
 } -result [list status 1 msg ""]
 

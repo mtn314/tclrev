@@ -27,8 +27,8 @@ proc ::regex_chk::init {} {
     ::regex_chk::add_rule $line_chk $rule $msg $level
 
     foreach {cmd re_cmd_switch} {
-        lsearch {((\-[a-z\-]+\s+)*|(\-index\s[0-9]+)*|(\-start\s[0-9]+)*)*}
-        lsort   {((\-[a-z\-]+\s+)*|(\-index\s[0-9]+)*|(\-command\s[^\s]+)*)*}
+        lsearch {((\-[a-z\-]+\s+)*|(\-index\s[0-9]+\s+)*|(\-start\s[0-9]+\s+)*)*}
+        lsort   {((\-[a-z\-]+\s+)*|(\-index\s[0-9]+\s+)*|(\-command\s[^\s]+\s+)*)*}
     } {
         set line_chk [format "%s%s%s" $re_prefix $cmd {[\s]+}]
         set rule     [format "%s%s%s%s" $line_chk $re_cmd_switch $re_multiline $re_not_word]
