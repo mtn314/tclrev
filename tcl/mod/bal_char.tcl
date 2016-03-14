@@ -5,9 +5,13 @@ namespace eval ::bal_char {}
 
 #
 # Checks if the given string has balanced braces
-# returns: 1 - yes, 0 - no
+# returns:
+#   true : {status 1 left <int> right <int>}
+#   false: {status 0 left <int> right <int>}
 proc ::bal_char::is_brace_balanced {string} {
     set counter 0
+    set left_brace_ctr 0
+    set right_brace_ctr 0
 
     foreach line [split $string "\n"] {
         if {[regexp {^\s*#} $line]} {
@@ -29,15 +33,17 @@ proc ::bal_char::is_brace_balanced {string} {
 
             if {$char == "\{"} {
                 incr counter
+                incr left_brace_ctr
             } elseif {$char == "\}"} {
                 incr counter -1
+                incr right_brace_ctr
             }
         }
     }
 
     if {$counter == 0} {
-        return 1
+        return [list status 1 left $left_brace_ctr right $right_brace_ctr]
     } else {
-        return 0
+        return [list status 0 left $left_brace_ctr right $right_brace_ctr]
     }
 }

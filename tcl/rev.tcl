@@ -30,8 +30,11 @@ proc ::rev::review_file {filepath} {
     ::report::reset
 
     set balanced_braces [::bal_char::is_brace_balanced $data]
-    if {!$balanced_braces} {
-        ::report::add_issue ERROR "" $filepath "Unbalanced braces" ""
+    if {![dict get $balanced_braces status]} {
+        set left  [dict get $balanced_braces left]
+        set right [dict get $balanced_braces right]
+        ::report::add_issue ERROR "" $filepath "Unbalanced braces - no. of: left: \
+            $left, right: $right" ""
         ::report::write
         ::report::reset
     }
