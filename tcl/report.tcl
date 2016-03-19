@@ -3,53 +3,51 @@ package provide report 1.0
 
 package require log 1.0
 
-namespace eval ::report {
-    variable ISSUES
+namespace eval ::report {}
 
-    set ISSUES [list]
-}
-
-proc ::report::add_issue {level line_no filepath msg snippet} {
-    variable ISSUES
-
+proc ::report::add_issue {report filepath level line_no msg snippet} {
     set issue [list \
         level    $level\
         line_no  $line_no\
-        filepath $filepath\
         msg      $msg\
         snippet  $snippet\
     ]
 
-    lappend ISSUES $issue
-}
-
-proc ::report::write {} {
-    variable ISSUES
-
-    foreach issue $ISSUES {
-        switch [dict get $issue level] {
-            WARN {
-                set logproc "::log::warn"
-            }
-            INFO {
-                set logproc "::log::info"
-            }
-            ERROR -
-            default {
-                set logproc "::log::error"
-            }
-        }
-
-        $logproc "---------------------------------"
-        $logproc [format "%s:%s" [dict get $issue filepath] [dict get $issue line_no]]
-        $logproc [dict get $issue msg]
-        $logproc [dict get $issue snippet]
-        $logproc ""
+    if {[dict exists $report $filepath]} {
+        set issues [dict get $report $filepath]
+        lappend issues $issue
+        dict set report $filepath $issues
+    } else {
+        dict set report $filepath [list $issue]
     }
+
+    return $report
 }
 
-proc ::report::reset {} {
-    variable ISSUES
+proc ::report::write {report} {
+    foreach {filepath issues} $report {
+        ::log::error [string repeat "=" 80]
+        ::log::error [format "File : %s" $filepath]
 
-    set ISSUES [list]
+        foreach issue $issues {
+            switch [dict get $issue level] {
+                WARN {
+                    set logproc "::log::warn"
+                }
+                INFO {
+                    set logproc "::log::info"
+                }
+                ERROR -
+                default {
+                    set logproc "::log::error"
+                }
+            }
+
+            $logproc [string repeat "-" 20]
+            $logproc [format "Line :%s" [dict get $issue line_no]]
+            $logproc [format "Issue: %s" [dict get $issue msg]]
+            $logproc [dict get $issue snippet]
+            $logproc ""
+        }
+    }
 }

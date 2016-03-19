@@ -18,3 +18,7 @@ set string "lsearch \[list a b c d e\] a"
 # Invalid
 
 lsearch lvar a
+
+if {[lsearch lvar a] != -1} {
+    puts "something"
+}

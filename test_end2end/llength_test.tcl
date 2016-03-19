@@ -14,3 +14,5 @@ llength \
 # Invalid
 
 llength lvar
+
+llength -invalid lvar

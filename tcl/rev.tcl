@@ -25,17 +25,21 @@ proc ::rev::review_file {filepath} {
     set data [read $handle]
     close $handle
 
-    regex_chk::review $filepath $data
-    ::report::write
-    ::report::reset
+    set report [regex_chk::review $filepath $data]
 
     set balanced_braces [::bal_char::is_brace_balanced $data]
     if {![dict get $balanced_braces status]} {
         set left  [dict get $balanced_braces left]
         set right [dict get $balanced_braces right]
-        ::report::add_issue ERROR "" $filepath "Unbalanced braces - no. of: left: \
-            $left, right: $right" ""
-        ::report::write
-        ::report::reset
+        set report [::report::add_issue \
+            $report \
+            $filepath \
+            ERROR \
+            "" \
+            "Unbalanced braces - no. of: left: $left, right: $right" \
+            "" \
+        ]
     }
+
+    ::report::write $report
 }

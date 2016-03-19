@@ -59,7 +59,7 @@ proc ::regex_chk::add_rule {line_chk main_rule msg level} {
 }
 
 
-proc ::regex_chk::review {filepath data} {
+proc ::regex_chk::review {filepath data {report ""}} {
     set rowno 0
     set lcmd [list]
 
@@ -85,8 +85,16 @@ proc ::regex_chk::review {filepath data} {
             continue
         }
 
-        ::report::add_issue [dict get $result level] $rowno $filepath [dict get $result msg] $line
+        set report [::report::add_issue \
+            $report \
+            $filepath \
+            [dict get $result level] \
+            $rowno \
+            [dict get $result msg] \
+            $line \
+        ]
     }
+    return $report
 }
 
 
@@ -113,6 +121,9 @@ proc ::regex_chk::is_complete {line} {
 
 proc ::regex_chk::run_checks {line} {
     foreach rule $::regex_chk::RULES {
+        if {![::log::is_level_enabled [dict get $rule level]]} {
+            continue
+        }
         set is_on_line [regexp [dict get $rule line_chk] $line]
         if {!$is_on_line} {
             continue
