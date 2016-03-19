@@ -34,11 +34,18 @@ proc ::log::info {msg} {
     ::log::_log INFO $msg 37
 }
 
-proc ::log::_log {level msg color} {
+proc ::log::is_level_enabled {level} {
     variable LEVEL
     variable LEVELS
 
     if {[dict get $LEVELS $level] <= [dict get $LEVELS $LEVEL]} {
+        return 1
+    }
+    return 0
+}
+
+proc ::log::_log {level msg color} {
+    if {[::log::is_level_enabled $level]} {
         puts "\033\[01;${color}m${level}\033\[0m :: ${msg}"
     }
 }
