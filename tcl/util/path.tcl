@@ -39,7 +39,7 @@ proc ::path::get_recursive_dirs {dir inc_symlinks} {
 
     foreach subdir [glob -nocomplain -type d [file join $dir *]] {
         if {$inc_symlinks == 0 && [file type $subdir] == "link"} {
-            ::log::info "Skipping symlink: $subdir"
+            ::tlog::info "Skipping symlink: $subdir"
             return $ldirs
         }
 

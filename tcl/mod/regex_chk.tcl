@@ -121,7 +121,7 @@ proc ::regex_chk::is_complete {line} {
 
 proc ::regex_chk::run_checks {line} {
     foreach rule $::regex_chk::RULES {
-        if {![::log::is_level_enabled [dict get $rule level]]} {
+        if {![::tlog::is_level_enabled [dict get $rule level]]} {
             continue
         }
         set is_on_line [regexp [dict get $rule line_chk] $line]

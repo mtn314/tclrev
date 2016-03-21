@@ -1,7 +1,7 @@
 #
 package provide report 1.0
 
-package require log 1.0
+package require tlog 1.0
 
 namespace eval ::report {}
 
@@ -26,20 +26,20 @@ proc ::report::add_issue {report filepath level line_no msg snippet} {
 
 proc ::report::write {report} {
     foreach {filepath issues} $report {
-        ::log::error [string repeat "=" 80]
-        ::log::error [format "File : %s" $filepath]
+        ::tlog::error [string repeat "=" 80]
+        ::tlog::error [format "File : %s" $filepath]
 
         foreach issue $issues {
             switch [dict get $issue level] {
                 WARN {
-                    set logproc "::log::warn"
+                    set logproc "::tlog::warn"
                 }
                 INFO {
-                    set logproc "::log::info"
+                    set logproc "::tlog::info"
                 }
                 ERROR -
                 default {
-                    set logproc "::log::error"
+                    set logproc "::tlog::error"
                 }
             }
 

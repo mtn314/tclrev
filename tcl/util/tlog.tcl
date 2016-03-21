@@ -1,7 +1,7 @@
 #
-package provide log 1.0
+package provide tlog 1.0
 
-namespace eval ::log {
+namespace eval ::tlog {
     variable LEVEL
     variable LEVELS
 
@@ -10,7 +10,7 @@ namespace eval ::log {
     dict set LEVELS INFO  3
 }
 
-proc ::log::init {level} {
+proc ::tlog::init {level} {
     variable LEVEL
     variable LEVELS
 
@@ -22,19 +22,19 @@ proc ::log::init {level} {
     set LEVEL $level
 }
 
-proc ::log::error {msg} {
-    ::log::_log ERROR $msg 31
+proc ::tlog::error {msg} {
+    ::tlog::_log ERROR $msg 31
 }
 
-proc ::log::warn {msg} {
-    ::log::_log WARN $msg 36
+proc ::tlog::warn {msg} {
+    ::tlog::_log WARN $msg 36
 }
 
-proc ::log::info {msg} {
-    ::log::_log INFO $msg 37
+proc ::tlog::info {msg} {
+    ::tlog::_log INFO $msg 37
 }
 
-proc ::log::is_level_enabled {level} {
+proc ::tlog::is_level_enabled {level} {
     variable LEVEL
     variable LEVELS
 
@@ -44,8 +44,8 @@ proc ::log::is_level_enabled {level} {
     return 0
 }
 
-proc ::log::_log {level msg color} {
-    if {[::log::is_level_enabled $level]} {
+proc ::tlog::_log {level msg color} {
+    if {[::tlog::is_level_enabled $level]} {
         puts "\033\[01;${color}m${level}\033\[0m :: ${msg}"
     }
 }

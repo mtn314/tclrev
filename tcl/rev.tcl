@@ -1,7 +1,7 @@
 #
 package provide rev 1.0
 
-package require log       1.0
+package require tlog      1.0
 package require path      1.0
 package require regex_chk 1.0
 package require bal_char  1.0

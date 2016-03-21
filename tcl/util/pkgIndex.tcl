@@ -2,9 +2,9 @@
 set ::xtn tcl
 
 foreach {pkg ver file} {
-    args 1.0 args
-    log  1.0 log
-    path 1.0 path
+    args  1.0 args
+    tlog  1.0 tlog
+    path  1.0 path
 } {
     # correct file paths - used with a relative in auto_path (mainly tcltest)
     set path [file dirname [info script]]
