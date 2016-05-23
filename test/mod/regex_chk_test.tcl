@@ -202,6 +202,17 @@ package require regex_chk 1.0
     ::regex_chk::run_checks $line
 } -result [list status 1 msg ""]
 
+::tcltest::test run_checks {lsort -$variable - valid} -setup {
+    ::tlog::init INFO
+    ::regex_chk::init
+} -body {
+    # you can do something like:
+    # set s increasing
+    # lsort -$s [list 1 3 2]
+    set line {lsort -$s $lvar}
+    ::regex_chk::run_checks $line
+} -result [list status 1 msg ""]
+
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
